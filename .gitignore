@@ -1,0 +1,8 @@
+*.rxbin
+*.rxas
+*.rxo
+*.status
+*.stop
+*.tmp
+*.job.sh
+*.job.cmd
