@@ -57,6 +57,11 @@
  *   file is re-read every minute, so edits take effect without a restart.
  *   Jobs are started in the background by default (SYNC to wait).
  *
+ * REXX JOBS: a job whose command starts with a .rex / .rexx file is run as
+ *   "regina <command>" (set environment variable CRON_REXX to use another
+ *   interpreter or a full path). This avoids the Windows file-association
+ *   launcher and its "Press ENTER key to exit.." prompt.
+ *
  * TESTING: environment variable CRON_OS=WIN or UNIX overrides the OS check.
  */
 
@@ -176,6 +181,15 @@ CronSleep: procedure
 RunJob: procedure
   parse arg cmd, opts
   opts = translate(opts)
+  /* A command starting with a REXX program (x.rex / x.rexx) is run through the
+     interpreter. Started via the Windows file association it would wait for
+     "Press ENTER key to exit..". Interpreter = env CRON_REXX, default 'regina'. */
+  w1 = translate(strip(word(cmd,1),'B','"'))
+  if right(w1,4) == '.REX' | right(w1,5) == '.REXX' then do
+    interp = value('CRON_REXX',,'ENVIRONMENT')
+    if interp == '' then interp = 'regina'
+    cmd = interp cmd
+  end
   sync = (wordpos('SYNC', opts) > 0)
   if sync then full = cmd
   else if IsWin() then full = 'start "cron" /b cmd /c' cmd

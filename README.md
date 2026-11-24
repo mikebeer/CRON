@@ -53,6 +53,11 @@ Also usable as a function from other Regina programs: `CRON('NEXT', '0 10 * * *'
 For that, the file must be named `CRON.rexx` and its folder must be on `PATH` (or in `REGINA_MACROS`),
 because Regina on Linux matches the case of the called function name.
 
+**REXX jobs:** a job whose command starts with a `.rex` / `.rexx` file, e.g. `0 10 * * * backup.rex arg1`,
+is run as `regina backup.rex arg1`. This bypasses the Windows file association, whose launcher waits for
+"Press ENTER key to exit.." after every job. Set the environment variable `CRON_REXX` to use another interpreter
+or a full path (e.g. `C:\Regina\regina.exe`). A job that already starts with `regina` is left as written.
+
 Tests: `regina test_cron.rexx` (with the folder on `PATH`).
 
 ## CREXX
